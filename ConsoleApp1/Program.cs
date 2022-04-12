@@ -24,30 +24,54 @@ namespace ConsoleApp1
             string file = Console.ReadLine().Replace("\"", "").Replace("'", "");
             if (ans == "1")
             {
-                CryptFile(file, pass, "Neki");
+                if (!CryptFile(file, pass, "Neki"))
+                {
+                    Console.WriteLine("Файл не найден пошел нахуй")
+                }
             }
             else
             {
-                UncryptFile(file, pass, "Neki");
+                if (!UncryptFile(file, pass, "Neki"))
+                {
+                    Console.WriteLine("Файл не найден пошел нахуй");
+                }
             }
+            Console.WriteLine("Процедура завершена");
+            Console.ReadKey();
         }
 
-        static void CryptFile(string file, string password, string salt)
+        static bool CryptFile(string file, string password, string salt)
         {
-            byte[] bytes = File.ReadAllBytes(file);
-            string text = encoding.GetString(bytes, 0, bytes.Length);
-            Cryptor cryptor = new Cryptor();
-            Reader reader = new Reader(file, ' ', encoding);
-            string crypted = cryptor.Crypt(text, password, salt);
-            reader.WriteBytesToFile(crypted);
+            if (File.Exists(file))
+            {
+                byte[] bytes = File.ReadAllBytes(file);
+                string text = encoding.GetString(bytes, 0, bytes.Length);
+                Cryptor cryptor = new Cryptor();
+                Reader reader = new Reader(file, ' ', encoding);
+                string crypted = cryptor.Crypt(text, password, salt);
+                reader.WriteBytesToFile(crypted);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        static void UncryptFile(string file, string password, string salt)
+        static bool UncryptFile(string file, string password, string salt)
         {
-            Reader reader = new Reader(file, ' ', encoding);
-            string text = reader.ReadBytesFromFile();
-            Cryptor cryptor = new Cryptor();
-            string crypted = cryptor.Decrypt(text, password, salt);
-            File.WriteAllBytes(file, encoding.GetBytes(crypted));
+            if (File.Exists(file))
+            {
+                Reader reader = new Reader(file, ' ', encoding);
+                string text = reader.ReadBytesFromFile();
+                Cryptor cryptor = new Cryptor();
+                string crypted = cryptor.Decrypt(text, password, salt);
+                File.WriteAllBytes(file, encoding.GetBytes(crypted));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         
     }
