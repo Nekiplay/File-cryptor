@@ -26,7 +26,7 @@ namespace ConsoleApp1
             {
                 if (!CryptFile(file, pass, "Neki"))
                 {
-                    Console.WriteLine("Файл не найден пошел нахуй")
+                    Console.WriteLine("Файл не найден пошел нахуй");
                 }
             }
             else
